@@ -3,6 +3,8 @@
 import re
 from typing import List
 import logging
+from os import getenv
+import mysql.connector
 
 
 def filter_datum(
@@ -32,6 +34,7 @@ class RedactingFormatter(logging.Formatter):
         msg = super().format(record)
         return filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
 
+
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
@@ -44,3 +47,19 @@ def get_logger() -> logging.Logger:
     handler.setFormatter(RedactingFormatter(RedactingFormatter.PII_FIELDS))
     logger.addHandler(handler)
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    '''returns a connector to a db
+    '''
+    username = getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    host = getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    db_name = getenv('PERSONAL_DATA_DB_NAME')
+
+    return mysql.connector.connect(
+        user=username,
+        password=password,
+        host=host,
+        database=db_name
+    )
