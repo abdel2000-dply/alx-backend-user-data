@@ -32,7 +32,7 @@ class RedactingFormatter(logging.Formatter):
         msg = super().format(record)
         return filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
 
-    PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
 def get_logger() -> logging.Logger:
