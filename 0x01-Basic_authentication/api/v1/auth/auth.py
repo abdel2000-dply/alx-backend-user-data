@@ -2,6 +2,7 @@
 """Authuntication module
 """
 from flask import request
+import fnmatch
 from typing import List, TypeVar
 
 
@@ -17,8 +18,9 @@ class Auth:
         if path[-1] != '/':
             path += '/'
 
-        if path in excluded_paths:
-            return False
+        for p in excluded_paths:
+            if fnmatch.fnmatch(path, p):
+                return False
 
         return True
 
