@@ -2,7 +2,7 @@
 """ Session expiration authentication module
 """
 from api.v1.auth.session_auth import SessionAuth
-from os import getenv
+import os
 from datetime import datetime, timedelta
 from typing import List
 
