@@ -13,6 +13,10 @@ class SessionExpAuth(SessionAuth):
         """ Constructor
         """
         self.session_duration = getenv('SESSION_DURATION', 0)
+        try:
+            self.session_duration = int(self.session_duration)
+        except Exception:
+            self.session_duration = 0
 
     def create_session(self, user_id: str = None) -> str:
         session_id = super().create_session(user_id)
