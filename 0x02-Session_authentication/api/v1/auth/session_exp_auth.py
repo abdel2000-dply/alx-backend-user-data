@@ -4,19 +4,21 @@
 from api.v1.auth.session_auth import SessionAuth
 from os import getenv
 from datetime import datetime, timedelta
+from typing import List
 
 
 class SessionExpAuth(SessionAuth):
     """ Session expiration authentication class
     """
     def __init__(self):
-        """ Constructor
-        """
-        self.session_duration = getenv('SESSION_DURATION', 0)
+        super().__init__()
         try:
-            self.session_duration = int(self.session_duration)
-        except Exception:
+            self.session_duration = int(os.getenv('SESSION_DURATION', '0'))
+        except ValueError:
             self.session_duration = 0
+
+    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
+        return super().require_auth(path, excluded_paths)
 
     def create_session(self, user_id: str = None) -> str:
         session_id = super().create_session(user_id)
