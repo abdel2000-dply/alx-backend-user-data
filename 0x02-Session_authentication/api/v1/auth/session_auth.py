@@ -3,7 +3,7 @@
 """
 from api.v1.auth.auth import Auth
 from models.user import User
-from typing import TypeVar
+from typing import List, TypeVar
 from uuid import uuid4
 
 
@@ -11,6 +11,10 @@ class SessionAuth(Auth):
     """ SessionAuth class
     """
     user_id_by_session_id = {}
+
+    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
+        """ Require authentication """
+        return super().require_auth(path, excluded_paths)
 
     def create_session(self, user_id: str = None) -> str:
         """ Create a session ID
