@@ -12,10 +12,6 @@ class SessionAuth(Auth):
     """
     user_id_by_session_id = {}
 
-    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """ Require authentication """
-        return super().require_auth(path, excluded_paths)
-
     def create_session(self, user_id: str = None) -> str:
         """ Create a session ID
         """

@@ -18,10 +18,6 @@ class SessionExpAuth(SessionAuth):
         except ValueError:
             self.session_duration = 0
 
-    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """ Require authentication"""
-        return super().require_auth(path, excluded_paths)
-
     def create_session(self, user_id: str = None) -> str:
         """ Create a session ID
         """
