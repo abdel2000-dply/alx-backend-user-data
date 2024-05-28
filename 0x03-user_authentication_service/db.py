@@ -18,7 +18,7 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db", echo=True)
+        self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -39,21 +39,23 @@ class DB:
         self._session.add(user)
         self._session.commit()
         return user
-    # def find_user_by(self, **kwargs) -> User:
-    #     """ Find a user by arbitrary keyword arguments
-    #     """
-    #     try:
-    #         return self._session.query(User).filter_by(**kwargs).one()
-    #     except NoResultFound:
-    #         raise NoResultFound
-    #     except InvalidRequestError:
-    #         raise InvalidRequestError
-    # def update_user(self, user_id: int, **kwargs) -> None:
-    #     """ Update a user's attributes based on user_id and keyword arguments
-    #     """
-    #     user = self.find_user_by(id=user_id)
-    #     for key, value in kwargs.items():
-    #         if not hasattr(user, key):
-    #             raise ValueError
-    #         setattr(user, key, value)
-    #     self._session.commit()
+
+    def find_user_by(self, **kwargs) -> User:
+        """ Find a user by arbitrary keyword arguments
+        """
+        try:
+            return self._session.query(User).filter_by(**kwargs).one()
+        except NoResultFound:
+            raise NoResultFound
+        except InvalidRequestError:
+            raise InvalidRequestError
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """ Update a user's attributes based on user_id and keyword arguments
+        """
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if not hasattr(user, key):
+                raise ValueError
+            setattr(user, key, value)
+        self._session.commit()
