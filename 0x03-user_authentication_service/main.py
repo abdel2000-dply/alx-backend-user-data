@@ -12,10 +12,12 @@ def register_user(email: str, password: str) -> None:
     assert response.status_code == 200
     assert response.json() == {'email': email, 'message': 'user created'}
 
+
 def log_in_wrong_password(email: str, password: str) -> None:
     data = {'email': email, 'password': password}
     response = requests.post(f'{url}/sessions', data=data)
     assert response.status_code == 401
+
 
 def log_in(email: str, password: str) -> str:
     data = {'email': email, 'password': password}
@@ -24,19 +26,25 @@ def log_in(email: str, password: str) -> str:
     assert response.json() == {'email': email, 'message': 'logged in'}
     return response.cookies.get('session_id')
 
+
 def profile_unlogged() -> None:
     response = requests.get(f'{url}/profile')
     assert response.status_code == 403
 
+
 def profile_logged(session_id: str) -> None:
-    response = requests.get(f'{url}/profile', cookies={'session_id': session_id})
+    response = requests.get(f'{url}/profile',
+                            cookies={'session_id': session_id})
     assert response.status_code == 200
     assert response.json() == {'email': EMAIL}
 
+
 def log_out(session_id: str) -> None:
-    response = requests.delete(f'{url}/sessions', cookies={'session_id': session_id})
+    response = requests.delete(f'{url}/sessions',
+                               cookies={'session_id': session_id})
     assert response.status_code == 200
     assert response.json() == {'message': 'Bienvenue'}
+
 
 def reset_password_token(email: str) -> str:
     data = {'email': email}
@@ -46,8 +54,10 @@ def reset_password_token(email: str) -> str:
     assert token is not None
     return token
 
+
 def update_password(email: str, reset_token: str, new_password: str) -> None:
-    data = {'email': email, 'reset_token': reset_token, 'new_password': new_password}
+    data = {'email': email, 'reset_token': reset_token,
+            'new_password': new_password}
     response = requests.put(f'{url}/reset_password', data=data)
     assert response.status_code == 200
     assert response.json() == {'email': email, 'message': 'Password updated'}
